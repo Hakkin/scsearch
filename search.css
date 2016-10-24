@@ -1,0 +1,73 @@
+#searchbox {
+  display: inline-block;
+  width: 80%;
+}
+
+#results .customplayer {
+  opacity: 0;
+}
+
+.search-date {
+  margin-top: 5px;
+  display: inline-block;
+  max-width: 150px;
+}
+
+.advanced-search-date {
+  margin-top: 5px;
+  max-width: 105px;
+  display: inline-block;
+}
+
+.date-input {
+  vertical-align: middle;
+  display: inline-block;
+  width: 140px;
+  border: inset 1px #CCC; 
+  background: #FFF;
+  border-radius: 4px;
+  color: #666;
+}
+
+.date-input * {
+  display: inline-block;
+}
+
+.date-input input {
+  text-align: center;
+  border: none;
+  background: none;
+  color: #000;        
+}
+
+.date-input-year {
+  width: 30%;
+}
+
+.date-input-month {
+  width: 20%;
+}
+
+.date-input-day {
+  width: 20%;
+}
+
+.load-more {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.load-more-btn {
+  width: 25%;
+}
+
+.fadein {
+  animation: fadein 0.2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
