@@ -62,25 +62,30 @@ function createPlayer(json) {
     return plural(Math.floor(seconds), "second");
   }
 
-  var playerTemplate = '<div class="row customplayer"><div class="uploadtime">{{UPLOADTIME}}</div><div class="albumart" style="background-image:url(\'{{ALBUMART}}\');"></div><div class="player"><button type="button" class="play-button btn btn-default btn-lg"><span class="play glyphicon glyphicon-play"></span><span class="pause glyphicon glyphicon-pause" style="display: none;"></span></button><div class="metadata"><div class="artist"><a target="_blank" href="{{ARTIST_URL}}">{{ARTIST}}</a></div><div class="title"><a target="_blank" href="{{TITLE_URL}}">{{TITLE}}</a></div></div><div class="waveform" style="background-image: url(\'{{WAVEFORM}}\');"><div class="played"></div></div></div><audio class="audioplayer" src=\'{{STREAM}}\' preload="none"></audio></div>';
-  
-  var formatters = {UPLOADTIME : timeSince(new Date(json.created_at)),
-                      ALBUMART : json.artwork_url ? json.artwork_url.replace('-large', '-t200x200')
-                               : json.user.avatar_url.replace('-large', '-t200x200'),
-                    ARTIST_URL : json.user.permalink_url,
-                        ARTIST : json.user.username,
-                     TITLE_URL : json.permalink_url,
-                         TITLE : json.title,
-                      WAVEFORM : json.waveform_url,
-                        STREAM : json.stream_url + '?client_id=' + config.sc.clientID};
-  
-  Object.keys(formatters).map(function(key) {
-    playerTemplate = playerTemplate.replace('{{' + key + '}}', formatters[key]);
-  });
+  var playerTemplate = '<div class="customplayer"><div class="uploadtime"></div><div class="albumart"></div><div class="player"><button type="button" class="play-button btn btn-default btn-lg"><span class="play glyphicon glyphicon-play"></span><span class="pause glyphicon glyphicon-pause" style="display: none;"></span></button><div class="metadata"><div class="artist"><a target="_blank"></a></div><div class="title"><a target="_blank"></a></div></div><div class="waveform"><div class="waveformimage"></div><div class="played"></div></div></div><audio class="audioplayer" preload="none"></audio></div>';
   
   var playerElement = document.createElement('div');
   playerElement.innerHTML = playerTemplate;
   playerElement = playerElement.firstChild;
+  
+  var uploadTime = playerElement.querySelector(".uploadtime"),
+      albumArt   = playerElement.querySelector(".albumart"),
+      artistURL  = playerElement.querySelector(".artist>a"),
+      titleURL   = playerElement.querySelector(".title>a"),
+      waveform   = playerElement.querySelector(".waveformimage"),
+      stream     = playerElement.querySelector(".audioplayer");
+  
+  uploadTime.innerText = timeSince(new Date(json.created_at));
+  albumArt.style.backgroundImage = "url('" +
+                                   ( json.artwork_url ? json.artwork_url.replace('-large', '-t200x200')
+                                   : json.user.avatar_url.replace('-large', '-t200x200') )
+                                   + "')";
+  artistURL.href = json.user.permalink_url;
+  artistURL.innerText = json.user.username;
+  titleURL.href = json.permalink_url;
+  titleURL.innerText = json.title;
+  waveform.style.backgroundImage = "url('" + json.waveform_url + "')";
+  stream.src = json.stream_url + '?client_id=' + config.sc.clientID;
   
   registerPlayer(playerElement);
   return playerElement;
@@ -118,7 +123,7 @@ function createPlayer(json) {
     })
     
     waveform.addEventListener("click", function(event) {
-      var seekPercentage = (event.clientX-this.offsetLeft) / this.offsetWidth;
+      var seekPercentage = (event.clientX-this.offsetParent.offsetLeft) / this.offsetWidth;
       var seekAudio = function() {
         var totalTime = audioPlayer.duration;
         progressBar.style.width = seekPercentage * 100 + "%";

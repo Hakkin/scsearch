@@ -4,7 +4,9 @@
 }
 
 #results .customplayer {
-  opacity: 0;
+	opacity: 0;
+	clear: both;
+	overflow: hidden;
 }
 
 .search-date {
